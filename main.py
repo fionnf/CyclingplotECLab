@@ -65,6 +65,11 @@ def plot_capacities_and_efficiency(mpr_file_path):
     fig.update_yaxes(title_text="Capacity (mAh)", secondary_y=False)
     fig.update_yaxes(title_text="Coulombic Efficiency (%)", secondary_y=True)
 
+    fig.update_layout(
+        plot_bgcolor = 'rgba(0,0,0,0)',  # Set plot background to transparent
+        paper_bgcolor = 'rgba(0,0,0,0)',  # Set paper background to transparent
+    )
+
     fig.show()
 
 
