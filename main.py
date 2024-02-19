@@ -15,6 +15,11 @@ import pandas as pd
 
 def process_mpr_data(mpr_file_path):
     df = ecf.to_df(mpr_file_path)
+
+    # Filter rows where mode is 1 (charge) or 2 (discharge)
+    df_filtered = df[df['mode'].isin([1, 2])]
+    df=df_filtered
+
     # Assuming that the cycle number increments for each new cycle in the 'Ns' column
     df['Cycle_Number'] = df['Ns'].diff().ne(0).cumsum()
 
@@ -26,7 +31,7 @@ def process_mpr_data(mpr_file_path):
     charge_capacity = df.groupby('Cycle_Number')['Q charge/discharge'].max()
 
     # Group by 'Cycle_Number' and get the min 'Q charge/discharge' for discharge capacity
-    discharge_capacity = df.groupby('Cycle_Number')['Q charge/discharge'].min()
+    discharge_capacity = df.groupby('Cycle_Number')['Q charge/discharge'].max()
 
     # Get the last time value for each cycle, which represents the cycle duration
     time = df.groupby('Cycle_Number')['time'].max()
