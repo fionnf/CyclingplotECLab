@@ -59,16 +59,11 @@ def plot_capacities_and_efficiency(mpr_file_path):
                    name='Coulombic Efficiency', marker=dict(color='green')), secondary_y=True)
 
     # Set x-axis title
-    fig.update_xaxes(title_text="Cycle Number")
+    fig.update_xaxes(title_text="Cycle Number",tickfont=dict(size=16))
 
     # Set y-axes titles
-    fig.update_yaxes(title_text="Capacity (mAh)", secondary_y=False)
-    fig.update_yaxes(title_text="Coulombic Efficiency (%)", secondary_y=True)
-
-    fig.update_layout(
-        plot_bgcolor = 'rgba(0,0,0,0)',  # Set plot background to transparent
-        paper_bgcolor = 'rgba(0,0,0,0)',  # Set paper background to transparent
-    )
+    fig.update_yaxes(title_text="Capacity (mAh)", secondary_y=False, tickfont=dict(size=16))
+    fig.update_yaxes(title_text="Coulombic Efficiency (%)", secondary_y=True, tickfont=dict(size=16))
 
     fig.show()
 
