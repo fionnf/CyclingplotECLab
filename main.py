@@ -15,19 +15,18 @@ def process_mpr_data(mpr_file_path):
     discharge_capacity = df[(df['mode'] == 1) & (df['ox/red'] == 0)].groupby('Full_Cycle_Number')['Abs_Q_charge_discharge'].min().abs()
     coulombic_efficiency = (discharge_capacity / charge_capacity) * 100
 
-    # Calculate time at the end of each full cycle, aligning with your requirement
-    # Assuming the maximum 'time' value of the last half cycle of each full cycle represents its end time
     time = df.groupby('Full_Cycle_Number')['time'].max()
 
-    # Create a DataFrame to hold the computed values
-    # Ensure all series are aligned by reindexing based on the union of charge and discharge cycle numbers
+    last_uts = df.groupby('Full_Cycle_Number')['uts'].last()
+
     cycle_numbers = charge_capacity.index.union(discharge_capacity.index)
     processed_df = pd.DataFrame({
         'Cycle_Number': cycle_numbers,
         'Charge_Capacity': charge_capacity.reindex(cycle_numbers, fill_value=0),
         'Discharge_Capacity': discharge_capacity.reindex(cycle_numbers, fill_value=0),
         'Coulombic Efficiency': coulombic_efficiency.reindex(cycle_numbers, fill_value=0),
-        'Time': time.reindex(cycle_numbers, fill_value=0)
+        'Time': time.reindex(cycle_numbers, fill_value=0),
+        'Last_UTS': last_uts.reindex(cycle_numbers, fill_value=0)
     })
 
     pd.set_option('display.max_columns', None)
@@ -36,8 +35,5 @@ def process_mpr_data(mpr_file_path):
     return processed_df
 
 
-# Replace 'path_to_your_mpr_file.mpr' with the actual path to your .mpr file
-# Replace 'path_to_your_output_txt_file.txt' with the desired path for the text file output
 mpr_file_path = r'C:\Users\fionn\Desktop\AkkuSpin\Test\Cyclerfolder\FF025e_cycle.mpr'
-txt_file_path = r'C:\Users\fionn\Desktop\AkkuSpin\Test\Cyclerfolder\FF025e_cycle.txt'
 process_mpr_data(mpr_file_path)
