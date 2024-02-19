@@ -12,9 +12,8 @@ def process_mpr_data(mpr_file_path):
 
     # Calculate charge and discharge capacities
     charge_capacity = df[(df['mode'] == 1) & (df['ox/red'] == 1)].groupby('Full_Cycle_Number')['Abs_Q_charge_discharge'].max()
-    discharge_capacity = df[(df['mode'] == 1) & (df['ox/red'] == 0)].groupby('Full_Cycle_Number')['Abs_Q_charge_discharge'].min()
-    discharge_capacity = abs(discharge_capacity)
-    coulombic_
+    discharge_capacity = df[(df['mode'] == 1) & (df['ox/red'] == 0)].groupby('Full_Cycle_Number')['Abs_Q_charge_discharge'].min().abs()
+    coulombic_efficiency = (discharge_capacity / charge_capacity) * 100
 
     # Calculate time at the end of each full cycle, aligning with your requirement
     # Assuming the maximum 'time' value of the last half cycle of each full cycle represents its end time
@@ -25,11 +24,14 @@ def process_mpr_data(mpr_file_path):
     cycle_numbers = charge_capacity.index.union(discharge_capacity.index)
     processed_df = pd.DataFrame({
         'Cycle_Number': cycle_numbers,
-        'Charge_Capacity': charge_capacity.reindex(cycle_numbers, fill_value=0).values,
-        'Discharge_Capacity': discharge_capacity.reindex(cycle_numbers, fill_value=0).values,
-        'Time': time.reindex(cycle_numbers).values
+        'Charge_Capacity': charge_capacity.reindex(cycle_numbers, fill_value=0),
+        'Discharge_Capacity': discharge_capacity.reindex(cycle_numbers, fill_value=0),
+        'Coulombic Efficiency': coulombic_efficiency.reindex(cycle_numbers, fill_value=0),
+        'Time': time.reindex(cycle_numbers, fill_value=0)
     })
 
+    pd.set_option('display.max_columns', None)
+    pd.set_option('display.width', None)
     print(processed_df)
     return processed_df
 
