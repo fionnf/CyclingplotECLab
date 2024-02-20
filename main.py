@@ -68,5 +68,5 @@ def plot_capacities_and_efficiency(mpr_file_path):
     fig.show()
 
 
-mpr_file_path = r'C:\Users\fionn\Desktop\AkkuSpin\Test\Cyclerfolder\FF025e_cycle.mpr'
+mpr_file_path = r'C:\Users\fionn\Desktop\FF054BioLgic_C06.mpr'
 plot_capacities_and_efficiency(mpr_file_path)
